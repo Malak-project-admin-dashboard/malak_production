@@ -1,0 +1,6 @@
+
+.bg-primary ,.btn-primary {
+    --bs-bg-opacity: 1;
+    background-color:#e6cc9f!important;
+    border-color: antiquewhite;
+}
