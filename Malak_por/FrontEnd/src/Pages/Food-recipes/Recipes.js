@@ -1,9 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import './Recipes.css';
 
 export default function Recipes() {
+
+  const [foodData, setFoodData] = useState([]);
+
+  //get all accepted food 
+  useEffect(() => {
+    async function fetch() {
+      axios
+        .get("http://localhost:8000/getAllTrueConfirmations")
+        .then((response) => {
+          setFoodData(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetch();
+  }, []);
+
+
+
+  
+   
+
+
+
+
   return (
 <>
+{foodData.map((item) => {
+                return (
+                  <div >
+                    <div >
+                      <h2 >{item.foodName}</h2>
+                      <img  src={item.foodUrl} alt="" />
+                      <p>{item.foodDesc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+
 
 
 

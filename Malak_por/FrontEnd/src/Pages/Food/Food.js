@@ -1,46 +1,43 @@
 import "./Food.css";
 import drage from "./قمح8.jpg";
 import drage2 from "../drug/قمحح39.jpg";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
 import FoodCard from "./FoodCard";
 const Food = () => {
-    const [foodData, setFoodData] = useState([]);
+  // const [foodData, setFoodData] = useState([]);
 
-    //get all accepted food 
-    useEffect(() => {
-      async function fetch() {
-        axios
-          .get("http://localhost:8000/getAllTrueConfirmations")
-          .then((response) => {
-            setFoodData(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      fetch();
-    }, []);
-  
+  //get all accepted food
+  // useEffect(() => {
+  //   async function fetch() {
+  //     axios
+  //       .get("http://localhost:8000/getAllFoods")
+  //       .then((response) => {
+          
+  //         setFoodData(response.data);
+  //         console.log(foodData);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  //   fetch();
+  // }, []);
+
   return (
     <>
     
-         {foodData.map((item) => {
-                  return (
-                    <div >
-                      <div >
-                        <h2 >{item.foodName}</h2>
-                        <img  src={item.foodUrl} alt="" />
-                        <p>{item.foodDesc}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-
-
-
-
+      {/* {foodData.map((item) => {
+        return (
+          <div>
+            <div>
+              <h2>{item.foodName}</h2>
+              <img src={item.foodUrl} alt="" />
+              <p>{item.foodDesc}</p>
+            </div>
+          </div>
+        );
+      })} */}
 
       {/* Blog Start */}
       <div className="container py-5" dir="rtl" lang="ar">

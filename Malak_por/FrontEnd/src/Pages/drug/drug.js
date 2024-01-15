@@ -5,20 +5,31 @@ import "./Drug.css";
 import drage from "./قمح777.jpg";
 import drage2 from "./قمحح39.jpg";
 import drage3 from "./دواء.jpeg";
-// import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
-// import AllDrugs from "../../fetchers/drugFetcher";
 
 export default function Drug() {
   const [drugData, setdrugData] = useState([]);
+  const [filteredDrugs, setFilteredDrugs] = useState([]);
 
-  //get all drugs data
+  const handleDietarySupplementsClick = () =>
+    filterDrugs("Dietary_supplements");
+  const handlePainkillersClick = () => filterDrugs("Painkillers");
+  const handleAntibioticsClick = () => filterDrugs("Antibiotics");
+  const handleChildrenMedicinesClick = () => filterDrugs("Children_medicines");
+  const handleMedicinesForTheElderlyClick = () =>
+    filterDrugs("Medicines_for_the_elderly");
+  const handleCosmeticsClick = () => filterDrugs("Cosmetics");
+  const handleAllClick = () => {
+    setFilteredDrugs(drugData);
+  };
   useEffect(() => {
     async function fetch() {
       axios
         .get("http://localhost:8000/getAllDrugs")
         .then((response) => {
+          console.log(response.data);
           setdrugData(response.data);
+          setFilteredDrugs(response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -26,6 +37,11 @@ export default function Drug() {
     }
     fetch();
   }, []);
+
+  const filterDrugs = (type) => {
+    const filtered = drugData.filter((drug) => drug.drugType === type);
+    setFilteredDrugs(filtered);
+  };
 
   return (
     <>
@@ -51,19 +67,25 @@ export default function Drug() {
             {/* Blog Detail End */}
             <div className="cards">
               <div className="row">
-                {drugData.map((item) => {
-                  return (
+                {/* Render the drugs here */}
+                {filteredDrugs.length > 0 ? (
+                  filteredDrugs.map((drug) => (
                     <div className="col-lg-6">
                       <div className="card">
-                        <h2 className="card-title">{item.drugName}</h2>
-                        <img className="img-drage" src={item.drugUrl} alt="" />
-                        <p className="card-desc pragragh">{item.drugDesc}</p>
+                        <h2 className="card-title">{drug.drugName}</h2>
+                        <img className="img-drage" src={drug.drugUrl} alt="" />
+                        <p className="card-desc pragragh">{drug.drugDesc}</p>
                       </div>
                     </div>
-                  );
-                })}
+                  ))
+                ) : (
+                  <div className="col-lg-12">
+                    <h2>لا يوجد ادوية مطابقة</h2>
+                  </div>
+                )}
               </div>
             </div>
+
             <div className="col-12 mt-lg-5 ">
               <a
                 href=""
@@ -73,68 +95,6 @@ export default function Drug() {
                 مرض فقر الدم
               </a>
             </div>
-
-            {/* Comment List Start */}
-            {/* <div className="mb-5 mt-lg-5">
-                            <h4 className="d-inline-block text-primary text-uppercase border-bottom border-5 mb-4">
-                                أبحث في موسوعه أنيميا للأدوية
-                            </h4>
-                           
-                          
-                        </div> */}
-            {/* Comment List End */}
-            {/* Comment Form Start */}
-            {/* <div className="bg-light rounded p-5">
-                            <h4 className="d-inline-block text-primary text-uppercase border-bottom border-5 border-white mb-4">
-                                هل لديك سؤال او استفسار ؟
-                            </h4>
-                            <br />
-                            <h6 className="d-inline-block  text-uppercase ">
-                                أحصل على استشاره طبية بخصوصيه تامه
-                            </h6>
-                            <form>
-                                <div className="row g-3">
-                                    <div className="col-12 col-sm-6">
-                                        <input
-                                            type="text"
-                                            className="form-control bg-light border-0"
-                                            placeholder="أدخل إسمك"
-                                            style={{ height: 55 }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-6">
-                                        <input
-                                            type="email"
-                                            className="form-control bg-light border-0"
-                                            placeholder="إدخل بريدك الالكتروني"
-                                            style={{ height: 55 }}
-                                        />
-                                    </div>
-                                    <div className="col-12">
-                                        <input
-                                            type="text"
-                                            className="form-control bg-light border-0"
-                                            placeholder="حالتك المرضيه"
-                                            style={{ height: 55 }}
-                                        />
-                                    </div>
-                                    <div className="col-12">
-                                        <textarea
-                                            className="form-control bg-light border-0"
-                                            rows={5}
-                                            placeholder="أدخل  رسالتك النصيه"
-                                            defaultValue={""}
-                                        />
-                                    </div>
-                                    <div className="col-12">
-                                        <button className="btn btn-primary w-100 py-3" type="submit">
-                                            إرسال إستفسارك
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> */}
-            {/* Comment Form End */}
           </div>
           {/* Sidebar Start */}
           <div className="col-lg-4" style={{ width: "28rem" }}>
@@ -150,78 +110,74 @@ export default function Drug() {
                 <button
                   className="btn btn-primary px-3 bttnn"
                   style={{ height: "72px" }}
-                >
-                  {/* <i className="fa fa-search" /> */}
-                </button>
+                ></button>
               </div>
             </div>
-            {/* Search Form End */}
-            {/* Category Start */}
-            {/* <div className="mb-5">
-                            <h4 className="d-inline-block text-primary text-uppercase border-bottom border-5 mb-4">
-                                أنواع فقر الدم
-                            </h4>
-                            <div
-                                className="d-flex flex-column justify-content-end"
-                                style={{ textAlign: "right" }}
-                            >
-                                <a className="h5 bg-light rounded py-2 px-3 mb-2" href="#">
-                                    <i className="fa fa-angle-right me-2" />
-                                    الثلاسيميا
-                                </a>
-                                <a className="h5 bg-light rounded py-2 px-3 mb-2" href="#">
-                                    <i className="fa fa-angle-right me-2" />
-                                    فقر الدم اللاتنسجي
-                                </a>
-                                <a className="h5 bg-light rounded py-2 px-3 mb-2" href="#">
-                                    <i className="fa fa-angle-right me-2" /> فقر الدم المنجلي
-                                </a>
-                                <a className="h5 bg-light rounded py-2 px-3 mb-2" href="#">
-                                    <i className="fa fa-angle-right me-2" />
-                                    فقر الدم الناجم عن نقص الفيتامينات{" "}
-                                </a>
-                                <a className="h5 bg-light rounded py-2 px-3 mb-2" href="#">
-                                    <i className="fa fa-angle-right me-2" />
-                                    فقر الدم بسبب نقص الحديد
-                                </a>
-                            </div>
-                        </div> */}
-            {/* Tags Start */}
+
             <div className="mb-5 ">
               <h4 className="d-inline-block text-primary text-uppercase border-bottom border-5 mb-4">
                 فرز الادويه :
               </h4>
               <div className="d-flex flex-wrap m-n1">
-                <a href="" className="btn btn-primary m-1 bttnn">
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handleDietarySupplementsClick}
+                >
                   المكملات الغذائيه
-                </a>
-                <a href="" className="btn btn-primary m-1 bttnn">
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handlePainkillersClick}
+                >
                   المسكنات
-                </a>
-                <a href="" className="btn btn-primary m-1 bttnn">
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handleAntibioticsClick}
+                >
                   المضادات الحيوية
-                </a>
-                <a href="" className="btn btn-primary m-1 bttnn">
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handleChildrenMedicinesClick}
+                >
                   أدويه للاطفال
-                </a>
-                <a href="" className="btn btn-primary m-1 bttnn">
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handleMedicinesForTheElderlyClick}
+                >
                   أدويه لكبار السن
-                </a>
-                <a href="" className="btn btn-primary m-1 bttnn">
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-1 bttnn"
+                  onClick={handleCosmeticsClick}
+                >
                   مستحضرات تجميلية
-                </a>
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary m-2 bttnn"
+                  onClick={handleAllClick}
+                >
+                  عرض الكل
+                </button>
               </div>
             </div>
-            {/* Tags End */}
-            {/* Image Start */}
+
             <div className="mb-5">
               <img className="img-fluid rounded" src={drage2} alt="" />
             </div>
-            {/* Image End */}
 
             <br />
             <br />
-            {/* Plain Text Start */}
+
             <div>
               <h4 className="d-inline-block text-primary text-uppercase border-bottom border-5 ">
                 طهاه متخصصن في إعداد الوصفات الخالي من الجلوتين !
@@ -259,17 +215,11 @@ export default function Drug() {
                   {" "}
                   أبدا الان
                 </Link>
-                {/* <button    onClick={()=>navigate("/")}  className="btn btn-primary py-2 px-4 bttnn">
-                                أبدا الان
-                                </button> */}
               </div>
             </div>
-            {/* Plain Text End */}
           </div>
-          {/* Sidebar End */}
         </div>
       </div>
-      {/* Blog End */}
     </>
   );
 }

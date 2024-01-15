@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import axios from "axios";
+
 import drage3 from "./food.png";
 const itemsPerPage = 4; // Define how many items to display per page 
 
@@ -16,6 +18,30 @@ const items = [
   ];
 function FoodCard() {
     const [currentPage, setCurrentPage] = useState(1); // Initialize the current page to 1
+    const [foodData, setFoodData] = useState([]);
+
+  //get all accepted food
+  useEffect(() => {
+    async function fetch() {
+      axios
+        .get("http://localhost:8000/getAllFoods")
+        .then((response) => {
+          
+          setFoodData(response.data);
+          console.log(foodData);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetch();
+  }, []);
+
+
+
+
+
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -46,6 +72,17 @@ function FoodCard() {
   
   return (
     <>
+         {foodData.map((item) => {
+        return (
+          <div>
+            <div>
+              <h2>{item.foodName}</h2>
+              <img src={item.foodUrl} alt="" />
+              <p>{item.foodDesc}</p>
+            </div>
+          </div>
+        );
+      })}
       <div>
       <div className="row">
         {currentItems.map((item) => (
